@@ -162,3 +162,17 @@ form.addEventListener("submit", function (event) {
   btn.style.display = "none";
   sendData();
 });
+
+var descrTextarea = document.getElementById("descr-textarea");
+descrTextarea.style.height = descrTextarea.scrollHeight + "px";
+descrTextarea.style.overflowY = "hidden";
+descrTextarea.addEventListener(
+  "input",
+  function () {
+    this.style.height = 0;
+    this.style.height = this.scrollHeight + "px";
+  },
+  false
+);
+
+console.log(descrTextarea);

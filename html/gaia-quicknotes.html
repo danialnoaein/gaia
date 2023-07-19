@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <meta
-      http-equiv="Content-Type"
-      content="text/html;charset=UTF-8"
-    />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
@@ -21,10 +18,7 @@
   version 
   16.07.2023 AS v0.2 use a=quicknote
  -->
-    <link
-      rel="stylesheet"
-      href="./styles.css"
-    />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
 
   <body>
@@ -37,23 +31,13 @@
       </h1>
       <!-- TODO: language selection via buttons: german and english. Later more...
 			Labels are modified during lang change  -->
-      <button
-        id="help"
-        class="hidden"
-      >
-        Erläuterungen ein/aus
-      </button>
-      <form
-        id="myform"
-        autocomplete="off"
-      >
+      <button id="help" class="hidden">Erläuterungen ein/aus</button>
+      <form id="myform" autocomplete="off">
         <div class="section"><span>1</span>Empfänger</div>
         <div class="inner-wrap">
           <label
             >Hallo Achim@debbi21
-            <span
-              class="ZZZZinfotext"
-              style="display: none"
+            <span class="ZZZZinfotext" style="display: none"
               >der Gaia Username des Empfängers</span
             >
             <input
@@ -72,23 +56,18 @@
 
         <div class="section"><span>2</span>Benachrichtigungstext</div>
         <div class="inner-wrap">
-          <button
-            id="mic"
-            class="zzhidden"
-          >
-            Mic
-          </button>
+          <button id="mic" class="zzhidden">Mic</button>
           <!-- TODO: Microhone styling -->
           <label class=""
             >Notiz, Aufgabe oder Termin eingeben:
-            <span
-              class="infotext"
-              style="display: none"
+            <span class="infotext" style="display: none"
               >your notes, task or calendar event</span
             >
             <textarea
               name="descr"
+              id="descr-textarea"
               type="text"
+              rows="1"
               placeholder="Milch kaufen bis Fr"
               autofocus
               autocorrect="off"
@@ -123,9 +102,6 @@
         <a href="https://www.F2Fnetwork.de">mehr über Gaia erfahren</a>
       </button>
     </div>
-    <script
-      src="./scripts.js"
-      type="text/javascript"
-    ></script>
+    <script src="./scripts.js" type="text/javascript"></script>
   </body>
 </html>
