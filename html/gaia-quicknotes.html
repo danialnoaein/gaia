@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="de">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<meta name="viewport"
-			content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-		<title>Gaia Quicknotes</title>
-		<!--  USAGE:
+<head>
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+	<title>Gaia Quicknotes</title>
+	<!--  USAGE:
   http://www.f2fnetwork.de/gaia-quicknotes.html?token=abc123
 
   token is created by Gaia server. Use "demo" for testing.
@@ -18,389 +18,390 @@
   16.07.2023 AS v0.2 use a=quicknote
   17.07.2023 AS v0.3 API changed to: a=msg.send&to=abc123&payload=...
  -->
-		<style type="text/css">
-
-.infotext {
-	background-color: #888;
-	color: #fff;
-	text-align: center;
-	border-radius: 6px;
-	padding: 8px 0;
-}
-
-div {
-	margin-bottom: 1em;
-}
-
-a {
-	text-decoration: none;
-	color: white;
-}
-
-.form-style-10 {
-	max-width: 450px;
-	padding: 30px;
-	margin: 4px auto;
-	background: #FFF;
-	border-radius: 10px;
-	-webkit-border-radius: 10px;
-	-moz-border-radius: 10px;
-	box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-	-moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-	-webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
-}
-
-.form-style-10 .inner-wrap {
-	padding: 8px;
-	background: #F4F4F4;
-	border-radius: 6px; 
-}
-
-.form-style-10 h1 {
-	background: #2A88AD;
-	padding: 0px 30px 15px 30px;
-	margin: -30px -30px 0px -30px;
-	border-radius: 10px 10px 0 0;
-	-webkit-border-radius: 10px 10px 0 0;
-	-moz-border-radius: 10px 10px 0 0;
-	color: #fff;
-	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12); 
-	-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	border: 1px solid #257C9E;
-}
-
-.form-style-10 h1>span {
-	display: block;
-	margin-top: 2px;
-	font-size: small; 
-}
-
-.form-style-10 label {
-	display: block; 
-	color: #444;
-	margin-bottom: 15px;
-}
-
-.form-style-10 input[type="text"], .form-style-10 input[type="date"],
-	.form-style-10 input[type="datetime"], .form-style-10 input[type="email"],
-	.form-style-10 input[type="number"], .form-style-10 input[type="search"],
-	.form-style-10 input[type="time"], .form-style-10 input[type="url"],
-	.form-style-10 input[type="password"], .form-style-10 textarea,
-	.form-style-10 select {
-	display: block;
-	box-sizing: border-box;
-	-webkit-box-sizing: border-box;
-	-moz-box-sizing: border-box;
-	width: 100%;
-	padding: 8px;
-	border-radius: 6px;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
-	border: 2px solid #fff;
-	box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-	-moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-	-webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
-}
-
-.form-style-10 .section {
-	display: none; 
-	color: #2A88AD;
-	margin-bottom: 5px;
-}
-
-.form-style-10 .section span {
-	background: #2A88AD;
-	padding: 5px 10px 5px 10px;
-	position: absolute;
-	border-radius: 50%;
-	-webkit-border-radius: 50%;
-	-moz-border-radius: 50%;
-	border: 4px solid #fff;
-	font-size: 14px;
-	margin-left: -45px;
-	color: #fff;
-	margin-top: -3px;
-}
-
-.form-style-10 input[type="button"], .form-style-10 input[type="submit"], #help, button
-	{
-	background: #2A88AD;
-	padding: 8px 20px 8px 20px;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	color: #fff;
-	text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12); 
-	-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
-	border: 1px solid #257C9E;
-	font-size: 15px;
-}
-
-button, .button-section {
-	margin: 8px;
-}
-
-.form-style-10 input[type="button"]:hover, .form-style-10 input[type="submit"]:hover
-	{
-	background: #2A6881;
-	-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-	-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-	box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
-}
-
-.form-style-10 .privacy-policy {
-	float: right;
-	width: 250px; 
-	color: #4D4D4D;
-	margin-top: 10px;
-	text-align: right;
-}
-
-.small {
-	color: #444;
-	font-size: small;
-}
-
-.hidden {
-	display: none !important;
-}
-
-</style>
-	</head>
-
-
-	<body>
-		<div class="form-style-10">
-			<h1>
-				Gaia Quicknotes
-				<span>Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin
-					in Gaia</span>
-			</h1>
-			<!-- TODO: language selection via buttons: german and english. Later more...
-			Labels are modified during lang change  -->
-			<button id="help" class="hidden">Erläuterungen ein/aus</button>
-			<form id="myform" autocomplete="off">
-				<div class="section">
-					<span>1</span>Empfänger
-				</div>
-				<div class="inner-wrap">
-					<label>Hallo Achim@debbi21
-						<span class="ZZZZinfotext" style="display: none;">der Gaia Username des
-							Empfängers</span>
-						<input class="hidden" name="to" id="to" type="text" autofocus
-							placeholder="" autocorrect="off" autocapitalize="none"
-							autocomplete="off">
-					</label>
-				</div>
-
-				<div class="section">
-					<span>2</span>Benachrichtigungstext
-				</div>
-				<div class="inner-wrap">
-					<button id="mic" class="zzhidden">Mic</button>
-					<!-- TODO: Microhone styling -->
-					<label class="">Notiz, Aufgabe oder Termin eingeben:
-						<span class="infotext" style="display: none;">your notes, task or calendar
-							event</span>
-						<textarea name="descr" type="text" placeholder="Milch kaufen bis Fr"
-							autofocus autocorrect="off" autocapitalize="none"
-							autocomplete="off"></textarea>
-						<!-- TODO: autogrow textarea while typing -->
-					</label>
-				</div>
-
-				<div id="reply"></div>
-				<div class="button-section">
-					<input type="submit" id="sendbutton" name="sendbutton"
-						value="senden" />
-				</div>
-			</form>
-
-			<div class="inner-wrap">
-				Du kannst hier deine Notizen, Aufgaben oder Termine eingeben.
-				Beispiele:
-				<li>Brot kaufen bis morgen 18:00</li>
-				<li>Erinnerung an graue Mülltonne Montag 18:00</li>
-				<li>14.07. 11:15 Meeting. Erinnerung 2 Stunden vorher</li>
-				<li>Montag 9 Uhr Meeting. Erinnerung am Vortag um 18 Uhr</li>
-			</div>
-			<button><a href="http://www.F2Fnetwork.de">Gaia Login</a></button>
-
-			<button><a href="https://www.F2Fnetwork.de">mehr über Gaia erfahren</a></button>
-		</div>
-
-		<script>
-
-function toggleHelp(el) {
-	var elements = el.getElementsByClassName("infotext");
-//	var elements2 = [].slice.call(elements, 0); // make a copy because of LIVE lists
-    for(var i = elements.length - 1; i >= 0; --i)  
-    {
-        if (elements[i].style.display === "none") {
-        	elements[i].style.display = "block";
-        } else {
-        	elements[i].style.display = "none";
-        }
-
-        //elements[i].classList.toggle("show");
-    	//if(elements2[i].classList.contains("show"))	elements2[i].classList.remove("show");
-    	//else	elements2[i].classList.add("show");
-
-    	// elements[i] no longer exists past this point, in most browsers
-    }   
-    
-}
-
-document.addEventListener('click', function (event) {
-	if (event.target.matches('label__UNUSED')) {
-		var elements = event.target.getElementsByClassName("infotext");
-		for(var i = elements.length - 1; i >= 0; --i)  
-    	{
-	        if (elements[i].style.display === "none") {
-        		elements[i].style.display = "block";
-        	} else {
-	        	elements[i].style.display = "none";
-        	}
-    	}
-	} // end if label
-	else if (event.target.id=="help") { // all .infotext on or off
-		var elements = document.getElementsByClassName("infotext");
-		var hide= true;
-		for(var i = elements.length - 1; i >= 0; --i)  
-    	{
-	        if (elements[i].style.display === "none" || !hide) {
-        		elements[i].style.display = "block";
-        		hide= false;
-        	} else {
-	        	elements[i].style.display = "none";
-	        	hide= true;
-        	}
-    	}	
-	} else if (event.target.id=="mic") {
-	   event.preventDefault();
-	}
-	
-}, false);
-
-
-var host = "www.F2Fnetwork.com"; // default Gaia host
-
-function findGetParameter(parameterName) {
-	var result = "",
-	tmp = [];
-	var items = location.search.substr(1).split("&");
-	for (var index = 0; index < items.length; index++) {
-		tmp = items[index].split("=");
-		if (tmp[0] === parameterName)
-			result = decodeURIComponent(tmp[1]);
-	}
-	return result;
-}
-
-function parseForm(form) {
-	let i, data=[];
-	for (i = form.elements.length - 1; i >= 0; i = i - 1) {
-		if (form.elements[i].name === "")
-			continue;
-		switch (form.elements[i].nodeName) {
-		case 'INPUT':
-		case 'TEXTAREA':
-			form.elements[i].value = form.elements[i].value.trim();
-			if (form.elements[i].value == "") {
-				var getvalue = findGetParameter(form.elements[i].name);
-				if (getvalue != "")
-					form.elements[i].value = getvalue;
-			}
-			
-			if (form.elements[i].value != "") {
-				if (form.elements[i].name == "sendbutton")
-					continue;
-				if (form.elements[i].name == "host")
-					host = form.elements[i].value;
-				else
-					data.push(form.elements[i].name + "="+ encodeURIComponent(form.elements[i].value));
-			}
-			break;
+	<style type="text/css">
+		.infotext {
+			background-color: #888;
+			color: #fff;
+			text-align: center;
+			border-radius: 6px;
+			padding: 8px 0;
 		}
-	}
 
-	// a=msg.send&to=demo&payload=descr=testmsg%26z%22hi%22
+		div {
+			margin-bottom: 1em;
+		}
 
-	let q = ["a=msg.send"];
-	//data.push("abc=0");
-	q.push("to=" + findGetParameter("token"));
-	//q.push("payload=" + JSON.stringify(data));
-	//q.push("payload=\"" + data.join("&") + "\"");
-	q.push("payload=" + data.join("%26")); // & == %26
+		a {
+			text-decoration: none;
+			color: white;
+		}
 
-	//let msg= {"to":findGetParameter("token"),"prio":"2","payload": encodeURIComponent(document.querySelector("[name='descr']").value)};
-	//let msg= {"to":findGetParameter("token"),"prio":"2","payload": JSON.stringify(data)};
-	//q.push("msgs="+JSON.stringify(msg));
-	//q.push("msgs="+msg.toString());
-	// a=msg.send&msgs=[{"to":"demo","prio":"2","payload":["descr","a%20vbvbb"]}]
-	return q.join("&");
-}
+		.form-style-10 {
+			max-width: 450px;
+			padding: 30px;
+			margin: 4px auto;
+			background: #FFF;
+			border-radius: 10px;
+			-webkit-border-radius: 10px;
+			-moz-border-radius: 10px;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+			-moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+			-webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.13);
+		}
+
+		.form-style-10 .inner-wrap {
+			padding: 8px;
+			background: #F4F4F4;
+			border-radius: 6px;
+		}
+
+		.form-style-10 h1 {
+			background: #2A88AD;
+			padding: 0px 30px 15px 30px;
+			margin: -30px -30px 0px -30px;
+			border-radius: 10px 10px 0 0;
+			-webkit-border-radius: 10px 10px 0 0;
+			-moz-border-radius: 10px 10px 0 0;
+			color: #fff;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+			-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			border: 1px solid #257C9E;
+		}
+
+		.form-style-10 h1>span {
+			display: block;
+			margin-top: 2px;
+			font-size: small;
+		}
+
+		.form-style-10 label {
+			display: block;
+			color: #444;
+			margin-bottom: 15px;
+		}
+
+		.form-style-10 input[type="text"],
+		.form-style-10 input[type="date"],
+		.form-style-10 input[type="datetime"],
+		.form-style-10 input[type="email"],
+		.form-style-10 input[type="number"],
+		.form-style-10 input[type="search"],
+		.form-style-10 input[type="time"],
+		.form-style-10 input[type="url"],
+		.form-style-10 input[type="password"],
+		.form-style-10 textarea,
+		.form-style-10 select {
+			display: block;
+			box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			-moz-box-sizing: border-box;
+			width: 100%;
+			padding: 8px;
+			border-radius: 6px;
+			-webkit-border-radius: 6px;
+			-moz-border-radius: 6px;
+			border: 2px solid #fff;
+			box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+			-moz-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+			-webkit-box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.33);
+		}
+
+		.form-style-10 .section {
+			display: none;
+			color: #2A88AD;
+			margin-bottom: 5px;
+		}
+
+		.form-style-10 .section span {
+			background: #2A88AD;
+			padding: 5px 10px 5px 10px;
+			position: absolute;
+			border-radius: 50%;
+			-webkit-border-radius: 50%;
+			-moz-border-radius: 50%;
+			border: 4px solid #fff;
+			font-size: 14px;
+			margin-left: -45px;
+			color: #fff;
+			margin-top: -3px;
+		}
+
+		.form-style-10 input[type="button"],
+		.form-style-10 input[type="submit"],
+		#help,
+		button {
+			background: #2A88AD;
+			padding: 8px 20px 8px 20px;
+			border-radius: 5px;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			color: #fff;
+			text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.12);
+			-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.17);
+			border: 1px solid #257C9E;
+			font-size: 15px;
+		}
+
+		button,
+		.button-section {
+			margin: 8px;
+		}
+
+		.form-style-10 input[type="button"]:hover,
+		.form-style-10 input[type="submit"]:hover {
+			background: #2A6881;
+			-moz-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+			-webkit-box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+			box-shadow: inset 0px 2px 2px 0px rgba(255, 255, 255, 0.28);
+		}
+
+		.form-style-10 .privacy-policy {
+			float: right;
+			width: 250px;
+			color: #4D4D4D;
+			margin-top: 10px;
+			text-align: right;
+		}
+
+		.small {
+			color: #444;
+			font-size: small;
+		}
+
+		.hidden {
+			display: none !important;
+		}
+	</style>
+</head>
 
 
-function sendData() {
-	let XHR = new XMLHttpRequest();
-	let FD = parseForm(form);
-	
-	XHR.addEventListener("load", function (event) {
-		btn.style.display = 'block';
-		var reply = event.target.response;
-		if (typeof reply != 'undefined' && reply !== null && reply != "" && 'statusCode' in reply) {
-			switch (reply.statusCode) {
-			case 0:
-				htmlreply.innerHTML = "OK. Die Daten wurden gesendet.";
-				labelID.value = "";
-				break;
-			case 201:
-			case 202:
-			case 310:
-				htmlreply.innerHTML = "FEHLER:\nfalsche Parameter.\nSind UserId und Text gefüllt ?\nIst die UserId korrekt ?";
-				break;
-			default:
-				htmlreply.innerHTML = "FEHLER:\n" + JSON.stringify(reply);
-				break;
+<body>
+	<div class="form-style-10">
+		<h1>
+			Gaia Quicknotes
+			<span>Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin
+				in Gaia</span>
+		</h1>
+		<!-- TODO: language selection via buttons: german and english. Later more...
+			Labels are modified during lang change  -->
+		<button id="help" class="hidden">Erläuterungen ein/aus</button>
+		<form id="myform" autocomplete="off">
+			<div class="section">
+				<span>1</span>Empfänger
+			</div>
+			<div class="inner-wrap">
+				<label>Hallo Achim@debbi21
+					<span class="ZZZZinfotext" style="display: none;">der Gaia Username des
+						Empfängers</span>
+					<input class="hidden" name="to" id="to" type="text" autofocus placeholder="" autocorrect="off"
+						autocapitalize="none" autocomplete="off">
+				</label>
+			</div>
+
+			<div class="section">
+				<span>2</span>Benachrichtigungstext
+			</div>
+			<div class="inner-wrap">
+				<button id="mic" class="zzhidden">Mic</button>
+				<!-- TODO: Microhone styling -->
+				<label class="">Notiz, Aufgabe oder Termin eingeben:
+					<span class="infotext" style="display: none;">your notes, task or calendar
+						event</span>
+					<textarea name="descr" type="text" placeholder="Milch kaufen bis Fr" autofocus autocorrect="off"
+						autocapitalize="none" autocomplete="off"></textarea>
+					<!-- TODO: autogrow textarea while typing -->
+				</label>
+			</div>
+
+			<div id="reply"></div>
+			<div class="button-section">
+				<input type="submit" id="sendbutton" name="sendbutton" value="senden" />
+			</div>
+		</form>
+
+		<div class="inner-wrap">
+			Du kannst hier deine Notizen, Aufgaben oder Termine eingeben.
+			Beispiele:
+			<li>Brot kaufen bis morgen 18:00</li>
+			<li>Erinnerung an graue Mülltonne Montag 18:00</li>
+			<li>14.07. 11:15 Meeting. Erinnerung 2 Stunden vorher</li>
+			<li>Montag 9 Uhr Meeting. Erinnerung am Vortag um 18 Uhr</li>
+		</div>
+		<button><a href="http://www.F2Fnetwork.de">Gaia Login</a></button>
+
+		<button><a href="https://www.F2Fnetwork.de">mehr über Gaia erfahren</a></button>
+	</div>
+
+	<script>
+
+		function toggleHelp(el) {
+			var elements = el.getElementsByClassName("infotext");
+			//	var elements2 = [].slice.call(elements, 0); // make a copy because of LIVE lists
+			for (var i = elements.length - 1; i >= 0; --i) {
+				if (elements[i].style.display === "none") {
+					elements[i].style.display = "block";
+				} else {
+					elements[i].style.display = "none";
+				}
+
+				//elements[i].classList.toggle("show");
+				//if(elements2[i].classList.contains("show"))	elements2[i].classList.remove("show");
+				//else	elements2[i].classList.add("show");
+
+				// elements[i] no longer exists past this point, in most browsers
 			}
-		} else
-			htmlreply.innerHTML = "FEHLER: unbekannte Antwort vom Server";
-	}); //load
-	
-	XHR.addEventListener("error", function (event) {
-		htmlreply.innerHTML = 'FEHLER: Host: ' + host + "\nPOST data:\n" + FD;
-		btn.style.display = 'block';
-	}); //error
-	
-	if (host.substr(0, 4) != "http")
-		host = "https://" + host;
-	XHR.open("POST", host + "/GaiaServer2.php");
-	XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	XHR.responseType = 'json';
-	console.log(FD);
-	XHR.send(FD);
-}
 
-var form = document.getElementById("myform");
-var btn = document.getElementById("sendbutton");
-//var useridID = document.getElementById("to");
-var labelID = document.getElementById("label");
-var htmlreply = document.getElementById("reply");
-parseForm(form); // set defaults from URI
-//document.getElementById("label").focus();
+		}
 
-form.addEventListener("submit", function (event) {
-	event.preventDefault();
-	htmlreply.innerHTML = "sende...";
-	btn.style.display = 'none';
-	sendData();
-});
+		document.addEventListener('click', function (event) {
+			if (event.target.matches('label__UNUSED')) {
+				var elements = event.target.getElementsByClassName("infotext");
+				for (var i = elements.length - 1; i >= 0; --i) {
+					if (elements[i].style.display === "none") {
+						elements[i].style.display = "block";
+					} else {
+						elements[i].style.display = "none";
+					}
+				}
+			} // end if label
+			else if (event.target.id == "help") { // all .infotext on or off
+				var elements = document.getElementsByClassName("infotext");
+				var hide = true;
+				for (var i = elements.length - 1; i >= 0; --i) {
+					if (elements[i].style.display === "none" || !hide) {
+						elements[i].style.display = "block";
+						hide = false;
+					} else {
+						elements[i].style.display = "none";
+						hide = true;
+					}
+				}
+			} else if (event.target.id == "mic") {
+				event.preventDefault();
+			}
 
-</script>
-	</body>
+		}, false);
+
+
+		var host = "www.F2Fnetwork.com"; // default Gaia host
+
+		function findGetParameter(parameterName) {
+			var result = "",
+				tmp = [];
+			var items = location.search.substr(1).split("&");
+			for (var index = 0; index < items.length; index++) {
+				tmp = items[index].split("=");
+				if (tmp[0] === parameterName)
+					result = decodeURIComponent(tmp[1]);
+			}
+			return result;
+		}
+
+		function parseForm(form) {
+			let i, data = [];
+			for (i = form.elements.length - 1; i >= 0; i = i - 1) {
+				if (form.elements[i].name === "")
+					continue;
+				switch (form.elements[i].nodeName) {
+					case 'INPUT':
+					case 'TEXTAREA':
+						form.elements[i].value = form.elements[i].value.trim();
+						if (form.elements[i].value == "") {
+							var getvalue = findGetParameter(form.elements[i].name);
+							if (getvalue != "")
+								form.elements[i].value = getvalue;
+						}
+
+						if (form.elements[i].value != "") {
+							if (form.elements[i].name == "sendbutton")
+								continue;
+							if (form.elements[i].name == "host")
+								host = form.elements[i].value;
+							else
+								data.push(form.elements[i].name + "=" + encodeURIComponent(form.elements[i].value));
+						}
+						break;
+				}
+			}
+
+			// a=msg.send&to=demo&payload=descr=testmsg%26z%22hi%22
+
+			let q = ["a=msg.send"];
+			//data.push("abc=0");
+			q.push("to=" + findGetParameter("token"));
+			//q.push("payload=" + JSON.stringify(data));
+			//q.push("payload=\"" + data.join("&") + "\"");
+			q.push("payload=" + data.join("%26")); // & == %26
+
+			//let msg= {"to":findGetParameter("token"),"prio":"2","payload": encodeURIComponent(document.querySelector("[name='descr']").value)};
+			//let msg= {"to":findGetParameter("token"),"prio":"2","payload": JSON.stringify(data)};
+			//q.push("msgs="+JSON.stringify(msg));
+			//q.push("msgs="+msg.toString());
+			// a=msg.send&msgs=[{"to":"demo","prio":"2","payload":["descr","a%20vbvbb"]}]
+			return q.join("&");
+		}
+
+
+		function sendData() {
+			let XHR = new XMLHttpRequest();
+			let FD = parseForm(form);
+
+			XHR.addEventListener("load", function (event) {
+				btn.style.display = 'block';
+				var reply = event.target.response;
+				if (typeof reply != 'undefined' && reply !== null && reply != "" && 'statusCode' in reply) {
+					switch (reply.statusCode) {
+						case 0:
+							htmlreply.innerHTML = "OK. Die Daten wurden gesendet.";
+							labelID.value = "";
+							break;
+						case 201:
+						case 202:
+						case 310:
+							htmlreply.innerHTML = "FEHLER:\nfalsche Parameter.\nSind UserId und Text gefüllt ?\nIst die UserId korrekt ?";
+							break;
+						default:
+							htmlreply.innerHTML = "FEHLER:\n" + JSON.stringify(reply);
+							break;
+					}
+				} else
+					htmlreply.innerHTML = "FEHLER: unbekannte Antwort vom Server";
+			}); //load
+
+			XHR.addEventListener("error", function (event) {
+				htmlreply.innerHTML = 'FEHLER: Host: ' + host + "\nPOST data:\n" + FD;
+				btn.style.display = 'block';
+			}); //error
+
+			if (host.substr(0, 4) != "http")
+				host = "https://" + host;
+			XHR.open("POST", host + "/GaiaServer2.php");
+			XHR.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			XHR.responseType = 'json';
+			console.log(FD);
+			XHR.send(FD);
+		}
+
+		var form = document.getElementById("myform");
+		var btn = document.getElementById("sendbutton");
+		//var useridID = document.getElementById("to");
+		var labelID = document.getElementById("label");
+		var htmlreply = document.getElementById("reply");
+		parseForm(form); // set defaults from URI
+		//document.getElementById("label").focus();
+
+		form.addEventListener("submit", function (event) {
+			event.preventDefault();
+			htmlreply.innerHTML = "sende...";
+			btn.style.display = 'none';
+			sendData();
+		});
+
+	</script>
+</body>
+
 </html>
