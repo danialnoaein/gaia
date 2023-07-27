@@ -81,25 +81,28 @@ function parseForm(form) {
           if (form.elements[i].name == "host") host = form.elements[i].value;
           else
             data.push(
-              form.elements[i].name,
-              encodeURIComponent(form.elements[i].value)
+              form.elements[i].name +
+                "=" +
+                encodeURIComponent(form.elements[i].value)
             );
         }
         break;
     }
   }
 
-  // GaiaServer.php:  msgs=[{"to":"121212","prio":"2","payload":"xxZZxxxx"}, ...]
-  // ?a=msg.send     &msgs=[{"to":"token","prio":"2","payload":"line%201%0Aline%202"}]
+  // a=msg.send&to=demo&payload=descr=testmsg%26z%22hi%22
+
   let q = ["a=msg.send"];
-  //q.push("to=" + findGetParameter("token"));
+  //data.push("abc=0");
+  q.push("to=" + findGetParameter("token"));
+  //q.push("payload=" + JSON.stringify(data));
+  //q.push("payload=\"" + data.join("&") + "\"");
+  q.push("payload=" + data.join("%26")); // & == %26
+
   //let msg= {"to":findGetParameter("token"),"prio":"2","payload": encodeURIComponent(document.querySelector("[name='descr']").value)};
-  let msg = {
-    to: findGetParameter("token"),
-    prio: "2",
-    payload: JSON.stringify(data),
-  };
-  q.push("msgs=" + JSON.stringify(msg));
+  //let msg= {"to":findGetParameter("token"),"prio":"2","payload": JSON.stringify(data)};
+  //q.push("msgs="+JSON.stringify(msg));
+  //q.push("msgs="+msg.toString());
   // a=msg.send&msgs=[{"to":"demo","prio":"2","payload":["descr","a%20vbvbb"]}]
   return q.join("&");
 }
@@ -174,5 +177,3 @@ descrTextarea.addEventListener(
   },
   false
 );
-
-console.log(descrTextarea);
