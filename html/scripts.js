@@ -293,8 +293,6 @@ if (!("webkitSpeechRecognition" in window)) {
 
     autoGrow(descrTextarea);
 
-    // final_span.innerHTML = linebreak(final_transcript);
-    // interim_span.innerHTML = linebreak(interim_transcript);
     if (final_transcript || interim_transcript) {
       // showButtons("inline-block");
     }
@@ -351,8 +349,13 @@ const languageTexts = {
     cardHeaderDescription: "Create a note/task/appointment in Gaia in a flash",
     accordionHeader: "Example of commands you can use here:",
     accordionList: [
-      { label: "", hasLink: false },
-      { label: "", hasLink: true, link: { text: "More...", ref: "http" } },
+      { label: "Buy bread until tomorrow 18:00", hasLink: false },
+      { label: "Gray bin reminder Monday 6:00 p.m", hasLink: false },
+      {
+        label: "14.07. 11:15 meeting. Reminder 2 hours before.",
+        hasLink: true,
+        link: { text: "More...", ref: "http" },
+      },
     ],
     micListeningLabel: "Listening...",
     textInputLabel: "Enter a note, task or appointment:",
@@ -369,8 +372,13 @@ const languageTexts = {
       "Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin in Gaia",
     accordionHeader: "Beispiele für Befehle, die Sie hier verwenden können:",
     accordionList: [
-      { label: "", hasLink: false },
-      { label: "", hasLink: true, link: { text: "More...", ref: "http" } },
+      { label: "Kaufen Sie Brot bis morgen 18:00 Uhr", hasLink: false },
+      { label: "Graue-Tonne-Erinnerung Montag 18:00 Uhr", hasLink: false },
+      {
+        label: "14.07. 11:15 Uhr Treffen. Erinnerung 2 Stunden vorher.",
+        hasLink: true,
+        link: { text: "Mehr...", ref: "#" },
+      },
     ],
     micListeningLabel: "Hören...",
     textInputLabel: "Geben Sie eine Notiz, Aufgabe oder einen Termin ein:",
@@ -407,6 +415,18 @@ const changeLanguage = (lang = "en-US") => {
     currentLang.accordionHeader
   );
   const accordionList = document.getElementById("accordionList");
+  accordionList.innerHTML = "";
+  currentLang.accordionList.forEach((item) => {
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode(item.label));
+    if (item.hasLink) {
+      let link = document.createElement("a");
+      link.href = item.link.ref;
+      link.innerHTML = item.link.text;
+      li.appendChild(link);
+    }
+    accordionList.appendChild(li);
+  });
 
   // MIC
   changeElemetLang(
@@ -414,7 +434,6 @@ const changeLanguage = (lang = "en-US") => {
     currentLang.micListeningLabel
   );
   // TEXT INPUT
-  const textInputLabel = document.getElementById("textInputLabel");
   changeElemetLang(
     document.getElementById("textInputLabel"),
     currentLang.textInputLabel
