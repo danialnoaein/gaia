@@ -58,6 +58,12 @@ div {
   border-top-right-radius: 0.25rem;
   margin-bottom: 0;
 }
+.card-header .logo {
+  max-width: 48px;
+}
+.card-header .logo svg {
+  border-radius: 4px;
+}
 .card-body {
   -ms-flex: 1 1 auto;
   flex: 1 1 auto;
