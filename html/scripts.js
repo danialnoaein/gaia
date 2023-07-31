@@ -1,3 +1,130 @@
+// Lang Changer
+const setting = {
+  currentLang: "en-US",
+};
+let langChangerRadio = document.getElementsByName("lang");
+function myfunction(event) {
+  setting.currentLang = event.target.value;
+  changeLanguage(event.target.value);
+}
+langChangerRadio.forEach((input) => {
+  input.addEventListener("change", myfunction);
+});
+
+const languageTexts = {
+  "en-US": {
+    cardHeaderHello: "Hello",
+    cardHeaderBrand: "Gaia Quicknotes",
+    cardHeaderDescription: "Create a note/task/appointment in Gaia in a flash",
+    accordionHeader: "Example of commands you can use here:",
+    accordionList: [
+      { label: "Buy bread until tomorrow 18:00", hasLink: false },
+      { label: "Gray bin reminder Monday 6:00 p.m", hasLink: false },
+      {
+        label: "14.07. 11:15 meeting. Reminder 2 hours before.",
+        hasLink: true,
+        link: { text: "More...", ref: "http" },
+      },
+    ],
+    micListeningLabel: "Listening...",
+    textInputLabel: "Enter a note, task or appointment:",
+    textInputPlaceholder: "For Example: Buy bread until tomorrow 18:00",
+    sendBtn: "Send",
+    sendBtnSendingState: "Sending...",
+    homeLink: "Home",
+    gaiaLogin: "Gaia Login",
+  },
+
+  "de-DE": {
+    cardHeaderHello: "Hallo",
+    cardHeaderBrand: "Gaia Quicknotes",
+    cardHeaderDescription:
+      "Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin in Gaia",
+    accordionHeader: "Beispiele für Befehle, die Sie hier verwenden können:",
+    accordionList: [
+      { label: "Kaufen Sie Brot bis morgen 18:00 Uhr", hasLink: false },
+      { label: "Graue-Tonne-Erinnerung Montag 18:00 Uhr", hasLink: false },
+      {
+        label: "14.07. 11:15 Uhr Treffen. Erinnerung 2 Stunden vorher.",
+        hasLink: true,
+        link: { text: "Mehr...", ref: "#" },
+      },
+    ],
+    micListeningLabel: "Hören...",
+    textInputLabel: "Geben Sie eine Notiz, Aufgabe oder einen Termin ein:",
+    textInputPlaceholder: "Zum Beispiel: Kaufen Sie Brot bis morgen 18:00 Uhr",
+    sendBtn: "Schicken",
+    sendBtnSendingState: "Senden...",
+    homeLink: "Heim",
+    gaiaLogin: "Gaia Anmeldung",
+  },
+};
+const changeElemetLang = (element, text) => {
+  if (element) {
+    element.innerHTML = text;
+  }
+};
+const changeLanguage = (lang = "en-US") => {
+  const currentLang = languageTexts[lang];
+  //HTML
+  document.documentElement.lang = lang;
+  // HEADER
+  changeElemetLang(
+    document.getElementById("cardHeaderHello"),
+    currentLang.cardHeaderHello
+  );
+  changeElemetLang(
+    document.getElementById("cardHeaderBrand"),
+    currentLang.cardHeaderBrand
+  );
+  changeElemetLang(
+    document.getElementById("cardHeaderDescription"),
+    currentLang.cardHeaderDescription
+  );
+
+  // ACCORDION
+  changeElemetLang(
+    document.getElementById("accordionHeader"),
+    currentLang.accordionHeader
+  );
+  const accordionList = document.getElementById("accordionList");
+  accordionList.innerHTML = "";
+  currentLang.accordionList.forEach((item) => {
+    let li = document.createElement("li");
+    li.appendChild(document.createTextNode(item.label));
+    if (item.hasLink) {
+      let link = document.createElement("a");
+      link.href = item.link.ref;
+      link.innerHTML = item.link.text;
+      li.appendChild(link);
+    }
+    accordionList.appendChild(li);
+  });
+
+  // MIC
+  changeElemetLang(
+    document.getElementById("listening"),
+    currentLang.micListeningLabel
+  );
+  // TEXT INPUT
+  changeElemetLang(
+    document.getElementById("textInputLabel"),
+    currentLang.textInputLabel
+  );
+  const textInput = document.getElementById("descr-textarea");
+  textInput.placeholder = currentLang.textInputPlaceholder;
+
+  // BUTTONS
+  changeElemetLang(document.getElementById("sendbutton"), currentLang.sendBtn);
+  changeElemetLang(document.getElementById("homeLink"), currentLang.homeLink);
+  changeElemetLang(document.getElementById("gaiaLogin"), currentLang.gaiaLogin);
+
+  //AJAX STATUS LABELS
+};
+changeLanguage();
+
+// Lang Changer [END]
+
 function toggleHelp(el) {
   var elements = el.getElementsByClassName("infotext");
   //	var elements2 = [].slice.call(elements, 0); // make a copy because of LIVE lists
@@ -107,12 +234,41 @@ function parseForm(form) {
   return q.join("&");
 }
 
+const SUBMIT_BITTON_READY_TO_SEND = "0";
+const SUBMIT_BUTTON_SENDING_DATA = "1";
+const chanegSubmitButtonState = (state = SUBMIT_BITTON_READY_TO_SEND) => {
+  const btn = document.getElementById("sendbutton");
+  console.log(setting);
+  if (state === SUBMIT_BUTTON_SENDING_DATA) {
+    changeElemetLang(
+      btn,
+      languageTexts[setting.currentLang].sendBtnSendingState
+    );
+    btn.disabled = true;
+  } else {
+    changeElemetLang(btn, languageTexts[setting.currentLang].sendBtn);
+    btn.disabled = false;
+  }
+};
+
+const SEND_DATA_SUCCEED = "0";
+const SEND_DATA_FAILED = "1";
+const showSendDataResult = (state = SEND_DATA_SUCCEED, message = "") => {
+  const reply = document.getElementById("reply");
+  reply.innerHTML = message;
+  if (state === SEND_DATA_SUCCEED) {
+    reply.style.color = "#0EAF00";
+  } else {
+    reply.style.color = "#E30000";
+  }
+};
+
 function sendData() {
   let XHR = new XMLHttpRequest();
   let FD = parseForm(form);
 
   XHR.addEventListener("load", function (event) {
-    btn.style.display = "block";
+    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
     var reply = event.target.response;
     if (
       typeof reply != "undefined" &&
@@ -122,25 +278,41 @@ function sendData() {
     ) {
       switch (reply.statusCode) {
         case 0:
-          htmlreply.innerHTML = "OK. Die Daten wurden gesendet.";
+          showSendDataResult(
+            SEND_DATA_SUCCEED,
+            "OK. Die Daten wurden gesendet."
+          );
           labelID.value = "";
           break;
         case 201:
         case 202:
         case 310:
-          htmlreply.innerHTML =
-            "FEHLER:\nfalsche Parameter.\nSind UserId und Text gefüllt ?\nIst die UserId korrekt ?";
+          showSendDataResult(
+            SEND_DATA_FAILED,
+            "FEHLER:\nfalsche Parameter.\nSind UserId und Text gefüllt ?\nIst die UserId korrekt ?"
+          );
           break;
         default:
-          htmlreply.innerHTML = "FEHLER:\n" + JSON.stringify(reply);
+          showSendDataResult(
+            SEND_DATA_FAILED,
+            "FEHLER:\n" + JSON.stringify(reply)
+          );
           break;
       }
-    } else htmlreply.innerHTML = "FEHLER: unbekannte Antwort vom Server";
+    } else {
+      showSendDataResult(
+        SEND_DATA_FAILED,
+        "FEHLER: unbekannte Antwort vom Server"
+      );
+    }
   }); //load
 
   XHR.addEventListener("error", function (event) {
-    htmlreply.innerHTML = "FEHLER: Host: " + host + "\nPOST data:\n" + FD;
-    btn.style.display = "block";
+    showSendDataResult(
+      SEND_DATA_FAILED,
+      "FEHLER: Host: " + host + "\nPOST data:\n" + FD
+    );
+    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
   }); //error
 
   if (host.substr(0, 4) != "http") host = "https://" + host;
@@ -152,17 +324,14 @@ function sendData() {
 }
 
 var form = document.getElementById("myform");
-var btn = document.getElementById("sendbutton");
 //var useridID = document.getElementById("to");
 var labelID = document.getElementById("label");
-var htmlreply = document.getElementById("reply");
 parseForm(form); // set defaults from URI
 //document.getElementById("label").focus();
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  htmlreply.innerHTML = "sende...";
-  btn.style.display = "none";
+  chanegSubmitButtonState(SUBMIT_BUTTON_SENDING_DATA);
   sendData();
 });
 
@@ -215,7 +384,6 @@ var final_transcript = "";
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
-console.log("media" in window);
 if (!("webkitSpeechRecognition" in window)) {
   upgrade();
 } else {
@@ -330,122 +498,3 @@ function startButton(event) {
   recognition.start();
   ignore_onend = false;
 }
-
-// Lang Changer
-
-let langChangerRadio = document.getElementsByName("lang");
-function myfunction(event) {
-  console.log("Checked radio with ID = " + event.target.value);
-  changeLanguage(event.target.value);
-}
-langChangerRadio.forEach((input) => {
-  input.addEventListener("change", myfunction);
-});
-
-const languageTexts = {
-  "en-US": {
-    cardHeaderHello: "Hello",
-    cardHeaderBrand: "Gaia Quicknotes",
-    cardHeaderDescription: "Create a note/task/appointment in Gaia in a flash",
-    accordionHeader: "Example of commands you can use here:",
-    accordionList: [
-      { label: "Buy bread until tomorrow 18:00", hasLink: false },
-      { label: "Gray bin reminder Monday 6:00 p.m", hasLink: false },
-      {
-        label: "14.07. 11:15 meeting. Reminder 2 hours before.",
-        hasLink: true,
-        link: { text: "More...", ref: "http" },
-      },
-    ],
-    micListeningLabel: "Listening...",
-    textInputLabel: "Enter a note, task or appointment:",
-    textInputPlaceholder: "For Example: Buy bread until tomorrow 18:00",
-    sendBtn: "Send",
-    homeLink: "Home",
-    gaiaLogin: "Gaia Login",
-  },
-
-  "de-DE": {
-    cardHeaderHello: "Hallo",
-    cardHeaderBrand: "Gaia Quicknotes",
-    cardHeaderDescription:
-      "Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin in Gaia",
-    accordionHeader: "Beispiele für Befehle, die Sie hier verwenden können:",
-    accordionList: [
-      { label: "Kaufen Sie Brot bis morgen 18:00 Uhr", hasLink: false },
-      { label: "Graue-Tonne-Erinnerung Montag 18:00 Uhr", hasLink: false },
-      {
-        label: "14.07. 11:15 Uhr Treffen. Erinnerung 2 Stunden vorher.",
-        hasLink: true,
-        link: { text: "Mehr...", ref: "#" },
-      },
-    ],
-    micListeningLabel: "Hören...",
-    textInputLabel: "Geben Sie eine Notiz, Aufgabe oder einen Termin ein:",
-    textInputPlaceholder: "Zum Beispiel: Kaufen Sie Brot bis morgen 18:00 Uhr",
-    sendBtn: "Schicken",
-    homeLink: "Heim",
-    gaiaLogin: "Gaia Anmeldung",
-  },
-};
-const changeElemetLang = (element, text) => {
-  element.innerHTML = text;
-};
-const changeLanguage = (lang = "en-US") => {
-  const currentLang = languageTexts[lang];
-  //HTML
-  document.documentElement.lang = lang;
-  // HEADER
-  changeElemetLang(
-    document.getElementById("cardHeaderHello"),
-    currentLang.cardHeaderHello
-  );
-  changeElemetLang(
-    document.getElementById("cardHeaderBrand"),
-    currentLang.cardHeaderBrand
-  );
-  changeElemetLang(
-    document.getElementById("cardHeaderDescription"),
-    currentLang.cardHeaderDescription
-  );
-
-  // ACCORDION
-  changeElemetLang(
-    document.getElementById("accordionHeader"),
-    currentLang.accordionHeader
-  );
-  const accordionList = document.getElementById("accordionList");
-  accordionList.innerHTML = "";
-  currentLang.accordionList.forEach((item) => {
-    let li = document.createElement("li");
-    li.appendChild(document.createTextNode(item.label));
-    if (item.hasLink) {
-      let link = document.createElement("a");
-      link.href = item.link.ref;
-      link.innerHTML = item.link.text;
-      li.appendChild(link);
-    }
-    accordionList.appendChild(li);
-  });
-
-  // MIC
-  changeElemetLang(
-    document.getElementById("listening"),
-    currentLang.micListeningLabel
-  );
-  // TEXT INPUT
-  changeElemetLang(
-    document.getElementById("textInputLabel"),
-    currentLang.textInputLabel
-  );
-  const textInput = document.getElementById("descr-textarea");
-  textInput.placeholder = currentLang.textInputPlaceholder;
-
-  // BUTTONS
-  changeElemetLang(document.getElementById("sendBtn"), currentLang.sendBtn);
-  changeElemetLang(document.getElementById("homeLink"), currentLang.homeLink);
-  changeElemetLang(document.getElementById("gaiaLogin"), currentLang.gaiaLogin);
-
-  //AJAX STATUS LABELS
-};
-changeLanguage();
