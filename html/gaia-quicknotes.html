@@ -22,107 +22,6 @@
   </head>
 
   <body>
-    <div
-      class="form-style-10"
-      style="display: none"
-    >
-      <h1>
-        Gaia Quicknotes
-        <span
-          >Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin in Gaia</span
-        >
-      </h1>
-      <!-- TODO: language selection via buttons: german and english. Later more...
-			Labels are modified during lang change  -->
-      <button
-        id="help"
-        class="hidden"
-      >
-        Erläuterungen ein/aus
-      </button>
-      <form
-        id="myform"
-        autocomplete="off"
-      >
-        <div class="section"><span>1</span>Empfänger</div>
-        <div class="inner-wrap">
-          <label
-            >Hallo Achim@debbi21
-            <span
-              class="ZZZZinfotext"
-              style="display: none"
-              >der Gaia Username des Empfängers</span
-            >
-            <input
-              class="hidden"
-              name="to"
-              id="to"
-              type="text"
-              autofocus
-              placeholder=""
-              autocorrect="off"
-              autocapitalize="none"
-              autocomplete="off"
-            />
-          </label>
-        </div>
-
-        <div class="section"><span>2</span>Benachrichtigungstext</div>
-        <div class="inner-wrap">
-          <button
-            id="mic"
-            class="zzhidden"
-          >
-            Mic
-          </button>
-          <!-- TODO: Microhone styling -->
-          <label class=""
-            >Notiz, Aufgabe oder Termin eingeben:
-            <span
-              class="infotext"
-              style="display: none"
-              >your notes, task or calendar event</span
-            >
-            <!-- <textarea
-              name="descr"
-              id="descr-textarea"
-              type="text"
-              rows="1"
-              placeholder="Milch kaufen bis Fr"
-              autofocus
-              autocorrect="off"
-              autocapitalize="none"
-              autocomplete="off"
-            ></textarea> -->
-            <!-- TODO: autogrow textarea while typing -->
-          </label>
-        </div>
-
-        <div id="reply"></div>
-        <div class="button-section">
-          <input
-            type="submit"
-            id="sendbutton"
-            name="sendbutton"
-            value="senden"
-          />
-        </div>
-      </form>
-
-      <div class="inner-wrap">
-        Du kannst hier deine Notizen, Aufgaben oder Termine eingeben. Beispiele:
-        <li>Brot kaufen bis morgen 18:00</li>
-        <li>Erinnerung an graue Mülltonne Montag 18:00</li>
-        <li>14.07. 11:15 Meeting. Erinnerung 2 Stunden vorher</li>
-        <li>Montag 9 Uhr Meeting. Erinnerung am Vortag um 18 Uhr</li>
-      </div>
-      <button><a href="http://www.F2Fnetwork.de">Gaia Login</a></button>
-
-      <button>
-        <a href="https://www.F2Fnetwork.de">mehr über Gaia erfahren</a>
-      </button>
-    </div>
-
     <div class="card card-primary">
       <div class="card-header">
         <div style="display: flex">
@@ -252,8 +151,20 @@
           <div id="listening">Listening...</div>
         </div>
         <!-- form start -->
-        <form>
+        <form id="myform">
           <div class="form-group">
+            <input
+              class="hidden"
+              name="to"
+              id="to"
+              type="text"
+              autofocus
+              placeholder=""
+              autocorrect="off"
+              autocapitalize="none"
+              autocomplete="off"
+            />
+
             <label
               id="textInputLabel"
               for="descr"
@@ -272,13 +183,18 @@
             ></textarea>
           </div>
           <!-- /.card-body -->
-          <button
-            type="submit"
-            id="sendBtn"
-            class="btn btn-primary"
-          >
-            Send
-          </button>
+
+          <div class="send-section">
+            <button
+              type="submit"
+              id="sendbutton"
+              name="sendbutton"
+              class="btn btn-primary"
+            >
+              Send
+            </button>
+            <div id="reply"></div>
+          </div>
         </form>
       </div>
 
