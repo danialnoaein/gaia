@@ -451,13 +451,16 @@ if (!("webkitSpeechRecognition" in window)) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript;
+        final_transcript = capitalize(final_transcript);
+        console.log("final_transcript", final_transcript);
+        descrTextarea.value = final_transcript;
       } else {
         interim_transcript += event.results[i][0].transcript;
+        interim_transcript = capitalize(interim_transcript);
+        console.log("interim_transcript", interim_transcript);
+        descrTextarea.value = interim_transcript;
       }
     }
-    final_transcript = capitalize(final_transcript);
-    console.log("final_transcript", final_transcript);
-    descrTextarea.value = final_transcript;
 
     autoGrow(descrTextarea);
 
