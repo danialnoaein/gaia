@@ -238,7 +238,6 @@ const SUBMIT_BITTON_READY_TO_SEND = "0";
 const SUBMIT_BUTTON_SENDING_DATA = "1";
 const chanegSubmitButtonState = (state = SUBMIT_BITTON_READY_TO_SEND) => {
   const btn = document.getElementById("sendbutton");
-  console.log(setting);
   if (state === SUBMIT_BUTTON_SENDING_DATA) {
     changeElemetLang(
       btn,
@@ -376,8 +375,9 @@ speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
 
-select_dialect = ["en-US", "United States"];
-// "de-DE"
+// select_dialect = ["en-US", "United States"];
+select_dialect = "de-DE";
+//
 
 var create_email = false;
 var final_transcript = "";
@@ -425,10 +425,10 @@ if (!("webkitSpeechRecognition" in window)) {
     }
     // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
     if (!final_transcript) {
-      showInfo("info_start");
+      //showInfo("info_start");
       return;
     }
-    showInfo("");
+    //showInfo("");
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
       var range = document.createRange();
@@ -497,7 +497,7 @@ function startButton(event) {
   }
 
   final_transcript = "";
-  recognition.lang = select_dialect.value;
+  recognition.lang = setting.currentLang;
   recognition.start();
   ignore_onend = false;
 }
