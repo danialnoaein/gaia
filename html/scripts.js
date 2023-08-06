@@ -238,7 +238,6 @@ const SUBMIT_BITTON_READY_TO_SEND = "0";
 const SUBMIT_BUTTON_SENDING_DATA = "1";
 const chanegSubmitButtonState = (state = SUBMIT_BITTON_READY_TO_SEND) => {
   const btn = document.getElementById("sendbutton");
-  console.log(setting);
   if (state === SUBMIT_BUTTON_SENDING_DATA) {
     changeElemetLang(
       btn,
@@ -376,8 +375,9 @@ speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
 
-select_dialect = ["en-US", "United States"];
-// "de-DE"
+// select_dialect = ["en-US", "United States"];
+select_dialect = "de-DE";
+//
 
 var create_email = false;
 var final_transcript = "";
@@ -425,10 +425,10 @@ if (!("webkitSpeechRecognition" in window)) {
     }
     // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
     if (!final_transcript) {
-      showInfo("info_start");
+      //showInfo("info_start");
       return;
     }
-    showInfo("");
+    //showInfo("");
     if (window.getSelection) {
       window.getSelection().removeAllRanges();
       var range = document.createRange();
@@ -451,13 +451,16 @@ if (!("webkitSpeechRecognition" in window)) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         final_transcript += event.results[i][0].transcript;
+        final_transcript = capitalize(final_transcript);
+        console.log("final_transcript", final_transcript);
+        descrTextarea.value = final_transcript;
       } else {
         interim_transcript += event.results[i][0].transcript;
+        interim_transcript = capitalize(interim_transcript);
+        console.log("interim_transcript", interim_transcript);
+        descrTextarea.value = interim_transcript;
       }
     }
-    final_transcript = capitalize(final_transcript);
-    console.log("final_transcript", final_transcript);
-    descrTextarea.value = final_transcript;
 
     autoGrow(descrTextarea);
 
@@ -494,7 +497,7 @@ function startButton(event) {
   }
 
   final_transcript = "";
-  recognition.lang = select_dialect.value;
+  recognition.lang = setting.currentLang;
   recognition.start();
   ignore_onend = false;
 }

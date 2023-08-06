@@ -236,7 +236,7 @@ blockquote {
 }
 
 .accordion:after {
-  content: "\002B";
+  content: "\005E";
   color: #777;
   font-weight: bold;
   float: right;
@@ -246,8 +246,8 @@ blockquote {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-.active:after {
-  content: "\2212";
+.accordion.active:after {
+  transform: rotate(180deg);
 }
 
 .panel {
@@ -283,16 +283,17 @@ blockquote {
 }
 
 /* IMAGE STYLES */
-[type="radio"] + img {
+[type="radio"] + .flag {
   cursor: pointer;
   padding: 2px;
+  display: inline-block;
   width: 30px;
-  height: 20px;
+  height: 24px;
   margin-left: 4px;
 }
 
 /* CHECKED STYLES */
-[type="radio"]:checked + img {
+[type="radio"]:checked + .flag {
   outline: 1px solid #17a2b8;
   padding: 2px;
 }
