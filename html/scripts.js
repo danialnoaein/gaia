@@ -1,10 +1,11 @@
 // Lang Changer
-const setting = {
+const state = {
   currentLang: "en-US",
+  finalTranscript: "",
 };
 let langChangerRadio = document.getElementsByName("lang");
 function myfunction(event) {
-  setting.currentLang = event.target.value;
+  state.currentLang = event.target.value;
   changeLanguage(event.target.value);
 }
 langChangerRadio.forEach((input) => {
@@ -125,24 +126,6 @@ changeLanguage();
 
 // Lang Changer [END]
 
-function toggleHelp(el) {
-  var elements = el.getElementsByClassName("infotext");
-  //	var elements2 = [].slice.call(elements, 0); // make a copy because of LIVE lists
-  for (var i = elements.length - 1; i >= 0; --i) {
-    if (elements[i].style.display === "none") {
-      elements[i].style.display = "block";
-    } else {
-      elements[i].style.display = "none";
-    }
-
-    //elements[i].classList.toggle("show");
-    //if(elements2[i].classList.contains("show"))	elements2[i].classList.remove("show");
-    //else	elements2[i].classList.add("show");
-
-    // elements[i] no longer exists past this point, in most browsers
-  }
-}
-
 document.addEventListener(
   "click",
   function (event) {
@@ -234,18 +217,15 @@ function parseForm(form) {
   return q.join("&");
 }
 
-const SUBMIT_BITTON_READY_TO_SEND = "0";
+const SUBMIT_BUTTON_READY_TO_SEND = "0";
 const SUBMIT_BUTTON_SENDING_DATA = "1";
-const chanegSubmitButtonState = (state = SUBMIT_BITTON_READY_TO_SEND) => {
+const changeSubmitButtonState = (state = SUBMIT_BUTTON_READY_TO_SEND) => {
   const btn = document.getElementById("sendbutton");
   if (state === SUBMIT_BUTTON_SENDING_DATA) {
-    changeElemetLang(
-      btn,
-      languageTexts[setting.currentLang].sendBtnSendingState
-    );
+    changeElemetLang(btn, languageTexts[state.currentLang].sendBtnSendingState);
     btn.disabled = true;
   } else {
-    changeElemetLang(btn, languageTexts[setting.currentLang].sendBtn);
+    changeElemetLang(btn, languageTexts[state.currentLang].sendBtn);
     btn.disabled = false;
   }
 };
@@ -267,7 +247,7 @@ function sendData() {
   let FD = parseForm(form);
 
   XHR.addEventListener("load", function (event) {
-    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
+    changeSubmitButtonState(SUBMIT_BUTTON_READY_TO_SEND);
     var reply = event.target.response;
     if (
       typeof reply != "undefined" &&
@@ -281,6 +261,7 @@ function sendData() {
             SEND_DATA_SUCCEED,
             "OK. Die Daten wurden gesendet."
           );
+          state.finalTranscript = "";
           labelID.value = "";
           break;
         case 201:
@@ -311,7 +292,7 @@ function sendData() {
       SEND_DATA_FAILED,
       "FEHLER: Host: " + host + "\nPOST data:\n" + FD
     );
-    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
+    changeSubmitButtonState(SUBMIT_BUTTON_READY_TO_SEND);
   }); //error
 
   if (host.substr(0, 4) != "http") host = "https://" + host;
@@ -330,7 +311,7 @@ parseForm(form); // set defaults from URI
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  chanegSubmitButtonState(SUBMIT_BUTTON_SENDING_DATA);
+  changeSubmitButtonState(SUBMIT_BUTTON_SENDING_DATA);
   sendData();
 });
 
@@ -380,7 +361,6 @@ select_dialect = "de-DE";
 //
 
 var create_email = false;
-var final_transcript = "";
 var recognizing = false;
 var ignore_onend;
 var start_timestamp;
@@ -389,7 +369,7 @@ if (!("webkitSpeechRecognition" in window)) {
 } else {
   speechRecorderButton.style.display = "inline-block";
   var recognition = new webkitSpeechRecognition();
-  recognition.continuous = true;
+  recognition.continuous = false;
   recognition.interimResults = true;
 
   recognition.onstart = function () {
@@ -424,7 +404,7 @@ if (!("webkitSpeechRecognition" in window)) {
       return;
     }
     // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
-    if (!final_transcript) {
+    if (!state.final_transcript) {
       //showInfo("info_start");
       return;
     }
@@ -450,10 +430,10 @@ if (!("webkitSpeechRecognition" in window)) {
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
-        final_transcript = capitalize(final_transcript);
-        console.log("final_transcript", final_transcript);
-        descrTextarea.value = final_transcript;
+        state.finalTranscript += event.results[i][0].transcript;
+        state.finalTranscript = capitalize(state.finalTranscript);
+        console.log("state.finalTranscript", state.finalTranscript);
+        descrTextarea.value = state.finalTranscript;
       } else {
         interim_transcript += event.results[i][0].transcript;
         interim_transcript = capitalize(interim_transcript);
@@ -464,7 +444,7 @@ if (!("webkitSpeechRecognition" in window)) {
 
     autoGrow(descrTextarea);
 
-    if (final_transcript || interim_transcript) {
+    if (state.finalTranscript || interim_transcript) {
       // showButtons("inline-block");
     }
   };
@@ -495,9 +475,7 @@ function startButton(event) {
     recognition.stop();
     return;
   }
-
-  final_transcript = "";
-  recognition.lang = setting.currentLang;
+  recognition.lang = state.currentLang;
   recognition.start();
   ignore_onend = false;
 }
