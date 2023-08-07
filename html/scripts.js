@@ -10,12 +10,12 @@ const voiceTextPreview = document.getElementById("voice-text-preview");
 const finalSpan = document.getElementById("final-span");
 const interimSpan = document.getElementById("interim-span");
 
-function myfunction(event) {
+const langRadioChangeHandle = (event) => {
   state.currentLang = event.target.value;
   changeLanguage(event.target.value);
-}
+};
 langChangerRadio.forEach((input) => {
-  input.addEventListener("change", myfunction);
+  input.addEventListener("change", langRadioChangeHandle);
 });
 
 const languageTexts = {
@@ -130,6 +130,21 @@ const changeLanguage = (lang = "en-US") => {
 changeLanguage();
 
 // Lang Changer [END]
+
+const updateUIAfterStartRecognition = () => {
+  speechRecorderButton.classList.add("pulser");
+  speechListeningText.classList.add("show");
+  textInput.style.display = "none";
+  voiceTextPreview.style.display = "block";
+};
+
+const updateUIAfterStopRecognition = () => {
+  speechRecorderButton.classList.remove("pulser");
+  speechListeningText.classList.remove("show");
+  textInput.style.display = "block";
+  voiceTextPreview.style.display = "none";
+  autoGrow(textInput);
+};
 
 document.addEventListener(
   "click",
@@ -336,7 +351,7 @@ textInput.addEventListener(
 );
 
 // accordion
-var acc = document.getElementsByClassName("accordion");
+const acc = document.getElementsByClassName("accordion");
 var i;
 
 for (i = 0; i < acc.length; i++) {
@@ -354,15 +369,21 @@ for (i = 0; i < acc.length; i++) {
 // Speech API
 // If you modify this array, also update default language / dialect below.
 
+const startButton = () => {
+  recognition.lang = state.currentLang;
+  if (state.recognizing) {
+    updateUIAfterStopRecognition();
+    recognition.stop();
+    return;
+  }
+  recognition.start();
+  ignore_onend = false;
+};
 const speechRecorderButton = document.getElementById("speech-recorder");
 const speechListeningText = document.getElementById("listening");
 speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
-
-// select_dialect = ["en-US", "United States"];
-select_dialect = "de-DE";
-//
 
 var ignore_onend;
 var start_timestamp;
@@ -396,6 +417,7 @@ if (!("webkitSpeechRecognition" in window)) {
       }
       ignore_onend = true;
     }
+    updateUIAfterStopRecognition();
     state.recognizing = false;
   };
 
@@ -453,28 +475,3 @@ function capitalize(s) {
     return m.toUpperCase();
   });
 }
-
-function startButton() {
-  recognition.lang = state.currentLang;
-  if (state.recognizing) {
-    updateUIAfterStopRecognition();
-    recognition.stop();
-    return;
-  }
-  recognition.start();
-  ignore_onend = false;
-}
-const updateUIAfterStartRecognition = () => {
-  speechRecorderButton.classList.add("pulser");
-  speechListeningText.classList.add("show");
-  textInput.style.display = "none";
-  voiceTextPreview.style.display = "block";
-};
-
-const updateUIAfterStopRecognition = () => {
-  speechRecorderButton.classList.remove("pulser");
-  speechListeningText.classList.remove("show");
-  textInput.style.display = "block";
-  voiceTextPreview.style.display = "none";
-  autoGrow(textInput);
-};
