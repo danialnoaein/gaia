@@ -2,6 +2,44 @@
 
 UI for adding quicknotes into gaia
 
+
+
+- later: add mic input volume
+https://stackoverflow.com/questions/21247571/how-to-get-microphone-input-volume-value-with-web-audio-api
+
+ // setup a analyzer
+ analyser = context.createAnalyser();
+ analyser.smoothingTimeConstant = 0.3;
+ analyser.fftSize = 1024;
+
+ javascriptNode = context.createScriptProcessor(2048, 1, 1);
+
+
+ javascriptNode.onaudioprocess = function() {
+
+        // get the average, bincount is fftsize / 2
+        var array =  new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(array);
+        var average = getAverageVolume(array)
+
+         console.log('VOLUME:' + average); //here's the volume
+ }
+
+ function getAverageVolume(array) {
+        var values = 0;
+        var average;
+
+        var length = array.length;
+
+        // get all the frequency amplitudes
+        for (var i = 0; i < length; i++) {
+            values += array[i];
+        }
+
+        average = values / length;
+        return average;
+  }
+
 ## Getting started
 
 To make it easy for you to get started with GitLab, here's a list of recommended next steps.
