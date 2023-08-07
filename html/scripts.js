@@ -1,10 +1,17 @@
 // Lang Changer
-const setting = {
+const state = {
   currentLang: "en-US",
+  finalTranscript: "",
+  recognizing: false,
 };
 let langChangerRadio = document.getElementsByName("lang");
+const textInput = document.getElementById("descr-textarea");
+const voiceTextPreview = document.getElementById("voice-text-preview");
+const finalSpan = document.getElementById("final-span");
+const interimSpan = document.getElementById("interim-span");
+
 function myfunction(event) {
-  setting.currentLang = event.target.value;
+  state.currentLang = event.target.value;
   changeLanguage(event.target.value);
 }
 langChangerRadio.forEach((input) => {
@@ -111,7 +118,6 @@ const changeLanguage = (lang = "en-US") => {
     document.getElementById("textInputLabel"),
     currentLang.textInputLabel
   );
-  const textInput = document.getElementById("descr-textarea");
   textInput.placeholder = currentLang.textInputPlaceholder;
 
   // BUTTONS
@@ -124,24 +130,6 @@ const changeLanguage = (lang = "en-US") => {
 changeLanguage();
 
 // Lang Changer [END]
-
-function toggleHelp(el) {
-  var elements = el.getElementsByClassName("infotext");
-  //	var elements2 = [].slice.call(elements, 0); // make a copy because of LIVE lists
-  for (var i = elements.length - 1; i >= 0; --i) {
-    if (elements[i].style.display === "none") {
-      elements[i].style.display = "block";
-    } else {
-      elements[i].style.display = "none";
-    }
-
-    //elements[i].classList.toggle("show");
-    //if(elements2[i].classList.contains("show"))	elements2[i].classList.remove("show");
-    //else	elements2[i].classList.add("show");
-
-    // elements[i] no longer exists past this point, in most browsers
-  }
-}
 
 document.addEventListener(
   "click",
@@ -234,18 +222,15 @@ function parseForm(form) {
   return q.join("&");
 }
 
-const SUBMIT_BITTON_READY_TO_SEND = "0";
+const SUBMIT_BUTTON_READY_TO_SEND = "0";
 const SUBMIT_BUTTON_SENDING_DATA = "1";
-const chanegSubmitButtonState = (state = SUBMIT_BITTON_READY_TO_SEND) => {
+const changeSubmitButtonState = (state = SUBMIT_BUTTON_READY_TO_SEND) => {
   const btn = document.getElementById("sendbutton");
   if (state === SUBMIT_BUTTON_SENDING_DATA) {
-    changeElemetLang(
-      btn,
-      languageTexts[setting.currentLang].sendBtnSendingState
-    );
+    changeElemetLang(btn, languageTexts[state.currentLang].sendBtnSendingState);
     btn.disabled = true;
   } else {
-    changeElemetLang(btn, languageTexts[setting.currentLang].sendBtn);
+    changeElemetLang(btn, languageTexts[state.currentLang].sendBtn);
     btn.disabled = false;
   }
 };
@@ -267,7 +252,7 @@ function sendData() {
   let FD = parseForm(form);
 
   XHR.addEventListener("load", function (event) {
-    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
+    changeSubmitButtonState(SUBMIT_BUTTON_READY_TO_SEND);
     var reply = event.target.response;
     if (
       typeof reply != "undefined" &&
@@ -281,6 +266,7 @@ function sendData() {
             SEND_DATA_SUCCEED,
             "OK. Die Daten wurden gesendet."
           );
+          state.finalTranscript = "";
           labelID.value = "";
           break;
         case 201:
@@ -311,7 +297,7 @@ function sendData() {
       SEND_DATA_FAILED,
       "FEHLER: Host: " + host + "\nPOST data:\n" + FD
     );
-    chanegSubmitButtonState(SUBMIT_BITTON_READY_TO_SEND);
+    changeSubmitButtonState(SUBMIT_BUTTON_READY_TO_SEND);
   }); //error
 
   if (host.substr(0, 4) != "http") host = "https://" + host;
@@ -330,7 +316,7 @@ parseForm(form); // set defaults from URI
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  chanegSubmitButtonState(SUBMIT_BUTTON_SENDING_DATA);
+  changeSubmitButtonState(SUBMIT_BUTTON_SENDING_DATA);
   sendData();
 });
 
@@ -339,10 +325,9 @@ const autoGrow = (element) => {
   element.style.height = element.scrollHeight + "px";
 };
 
-var descrTextarea = document.getElementById("descr-textarea");
-descrTextarea.style.height = descrTextarea.scrollHeight + "px";
-descrTextarea.style.overflowY = "hidden";
-descrTextarea.addEventListener(
+textInput.style.height = textInput.scrollHeight + "px";
+textInput.style.overflowY = "hidden";
+textInput.addEventListener(
   "input",
   function () {
     autoGrow(this);
@@ -379,9 +364,6 @@ speechRecorderButton.addEventListener("click", function () {
 select_dialect = "de-DE";
 //
 
-var create_email = false;
-var final_transcript = "";
-var recognizing = false;
 var ignore_onend;
 var start_timestamp;
 if (!("webkitSpeechRecognition" in window)) {
@@ -393,10 +375,8 @@ if (!("webkitSpeechRecognition" in window)) {
   recognition.interimResults = true;
 
   recognition.onstart = function () {
-    speechRecorderButton.classList.add("pulser");
-    speechListeningText.classList.add("show");
-
-    recognizing = true;
+    updateUIAfterStartRecognition();
+    state.recognizing = true;
   };
 
   recognition.onerror = function (event) {
@@ -416,15 +396,16 @@ if (!("webkitSpeechRecognition" in window)) {
       }
       ignore_onend = true;
     }
+    state.recognizing = false;
   };
 
   recognition.onend = function () {
-    recognizing = false;
+    state.recognizing = false;
     if (ignore_onend) {
       return;
     }
     // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
-    if (!final_transcript) {
+    if (!state.finalTranscript) {
       //showInfo("info_start");
       return;
     }
@@ -434,9 +415,6 @@ if (!("webkitSpeechRecognition" in window)) {
       var range = document.createRange();
       // range.selectNode(document.getElementById("final_span"));
       window.getSelection().addRange(range);
-    }
-    if (create_email) {
-      create_email = false;
     }
   };
 
@@ -450,35 +428,23 @@ if (!("webkitSpeechRecognition" in window)) {
     }
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        final_transcript += event.results[i][0].transcript;
-        final_transcript = capitalize(final_transcript);
-        console.log("final_transcript", final_transcript);
-        descrTextarea.value = final_transcript;
+        state.finalTranscript += event.results[i][0].transcript;
+        console.log("state.finalTranscript", state.finalTranscript);
       } else {
         interim_transcript += event.results[i][0].transcript;
         interim_transcript = capitalize(interim_transcript);
         console.log("interim_transcript", interim_transcript);
-        descrTextarea.value = interim_transcript;
       }
     }
-
-    autoGrow(descrTextarea);
-
-    if (final_transcript || interim_transcript) {
-      // showButtons("inline-block");
-    }
+    state.finalTranscript = capitalize(state.finalTranscript);
+    textInput.value = state.finalTranscript;
+    finalSpan.innerHTML = state.finalTranscript;
+    interimSpan.innerHTML = interim_transcript;
   };
 }
 
 function upgrade() {
   speechRecorderButton.parentElement.style.display = "none";
-  // showInfo("info_upgrade");
-}
-
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-function linebreak(s) {
-  return s.replace(two_line, "<p></p>").replace(one_line, "<br>");
 }
 
 var first_char = /\S/;
@@ -488,16 +454,27 @@ function capitalize(s) {
   });
 }
 
-function startButton(event) {
-  if (recognizing) {
-    speechRecorderButton.classList.remove("pulser");
-    speechListeningText.classList.remove("show");
+function startButton() {
+  recognition.lang = state.currentLang;
+  if (state.recognizing) {
+    updateUIAfterStopRecognition();
     recognition.stop();
     return;
   }
-
-  final_transcript = "";
-  recognition.lang = setting.currentLang;
   recognition.start();
   ignore_onend = false;
 }
+const updateUIAfterStartRecognition = () => {
+  speechRecorderButton.classList.add("pulser");
+  speechListeningText.classList.add("show");
+  textInput.style.display = "none";
+  voiceTextPreview.style.display = "block";
+};
+
+const updateUIAfterStopRecognition = () => {
+  speechRecorderButton.classList.remove("pulser");
+  speechListeningText.classList.remove("show");
+  textInput.style.display = "block";
+  voiceTextPreview.style.display = "none";
+  autoGrow(textInput);
+};
