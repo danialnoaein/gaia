@@ -461,7 +461,7 @@ if (!("webkitSpeechRecognition" in window)) {
     state.finalTranscript = capitalize(state.finalTranscript);
     textInput.value = state.finalTranscript;
     finalSpan.innerHTML = state.finalTranscript;
-    interimSpan.innerHTML = interim_transcript;
+    // interimSpan.innerHTML = interim_transcript;
   };
 }
 
