@@ -17,8 +17,9 @@ a {
 
 body,
 p,
-div {
-  font-family: "Inter", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+div,
+textarea {
+  font-family: "Segoe UI", sans-serif;
   font-size: 12px;
 }
 
@@ -203,9 +204,19 @@ blockquote {
     opacity: 0;
   }
 }
+
+#voice-text-preview {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  display: none;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 8px;
+  min-height: 38px;
+}
+
 /* TEXTAREA */
 #descr-textarea {
-  font-family: "Inter", "Segoe UI", sans-serif;
   border: 1px solid rgba(0, 0, 0, 0.1);
   display: block;
   width: 100%;

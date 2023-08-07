@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta
-      http-equiv="Content-Type"
-      content="text/html;charset=UTF-8"
-    />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, user-scalable=yes"
@@ -15,10 +12,7 @@
     /> -->
     <title>Gaia Quicknotes</title>
 
-    <link
-      rel="stylesheet"
-      href="./styles.css"
-    />
+    <link rel="stylesheet" href="./styles.css" />
   </head>
 
   <body>
@@ -27,12 +21,7 @@
         <div style="display: flex">
           <div style="flex: 1">
             <p><span id="cardHeaderHello">Hallo</span> Achim@debbi21</p>
-            <h2
-              class="card-title"
-              id="cardHeaderBrand"
-            >
-              Gaia Quicknotes
-            </h2>
+            <h2 class="card-title" id="cardHeaderBrand">Gaia Quicknotes</h2>
             <p id="cardHeaderDescription">
               Erstelle blitzschnell eine Notiz/Aufgabe/einen Termin in Gaia
             </p>
@@ -45,22 +34,14 @@
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
             >
-              <rect
-                width="360"
-                height="360"
-                rx="10"
-                fill="white"
-              />
+              <rect width="360" height="360" rx="10" fill="white" />
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
                 d="M325.319 13.9062L256.622 276.631L86.7168 64.2487L325.319 13.9062ZM99.2833 68.7514L253.378 261.369L315.681 23.0938L99.2833 68.7514Z"
                 fill="black"
               />
-              <path
-                d="M42 26H133V118H42V26Z"
-                fill="#636366"
-              />
+              <path d="M42 26H133V118H42V26Z" fill="#636366" />
               <path
                 fill-rule="evenodd"
                 clip-rule="evenodd"
@@ -79,10 +60,7 @@
               />
             </svg>
 
-            <img
-              src=""
-              alt=""
-            />
+            <img src="" alt="" />
           </div>
         </div>
       </div>
@@ -91,12 +69,7 @@
       <div class="card-body">
         <div class="langs">
           <label>
-            <input
-              type="radio"
-              name="lang"
-              value="en-US"
-              checked
-            />
+            <input type="radio" name="lang" value="en-US" checked />
 
             <div class="flag">
               <svg
@@ -104,10 +77,7 @@
                 id="flag-icons-gb"
                 viewBox="0 0 640 480"
               >
-                <path
-                  fill="#012169"
-                  d="M0 0h640v480H0z"
-                />
+                <path fill="#012169" d="M0 0h640v480H0z" />
                 <path
                   fill="#FFF"
                   d="m75 0 244 181L562 0h78v62L400 241l240 178v61h-80L320 301 81 480H0v-60l239-178L0 64V0h75z"
@@ -129,34 +99,21 @@
           </label>
 
           <label>
-            <input
-              type="radio"
-              name="lang"
-              value="de-DE"
-            />
+            <input type="radio" name="lang" value="de-DE" />
             <div class="flag">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 id="flag-icons-de"
                 viewBox="0 0 640 480"
               >
-                <path
-                  fill="#ffce00"
-                  d="M0 320h640v160H0z"
-                />
+                <path fill="#ffce00" d="M0 320h640v160H0z" />
                 <path d="M0 0h640v160H0z" />
-                <path
-                  fill="#d00"
-                  d="M0 160h640v160H0z"
-                />
+                <path fill="#d00" d="M0 160h640v160H0z" />
               </svg>
             </div>
           </label>
         </div>
-        <button
-          class="accordion"
-          id="accordionHeader"
-        >
+        <button class="accordion" id="accordionHeader">
           Example of commands you can use here:
         </button>
         <div class="panel">
@@ -171,10 +128,7 @@
         </div>
 
         <div class="mic">
-          <button
-            id="speech-recorder"
-            class="btn btn-app bg-info btn-mic"
-          >
+          <button id="speech-recorder" class="btn btn-app bg-info btn-mic">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="currentColor"
@@ -203,11 +157,13 @@
               autocomplete="off"
             />
 
-            <label
-              id="textInputLabel"
-              for="descr"
+            <label id="textInputLabel" for="descr"
               >Enter a note, task or appointment:</label
             >
+            <div id="voice-text-preview">
+              <span id="final-span"></span><span id="interim-span"></span>
+            </div>
+
             <textarea
               name="descr"
               id="descr-textarea"
@@ -237,22 +193,11 @@
       </div>
 
       <div class="card-footer">
-        <a
-          href="#"
-          id="homeLink"
-          >Home</a
-        >
-        <a
-          href="#"
-          id="gaiaLogin"
-          >Gaia Login</a
-        >
+        <a href="#" id="homeLink">Home</a>
+        <a href="#" id="gaiaLogin">Gaia Login</a>
       </div>
     </div>
 
-    <script
-      src="./scripts.js"
-      type="text/javascript"
-    ></script>
+    <script src="./scripts.js" type="text/javascript"></script>
   </body>
 </html>

@@ -2,8 +2,14 @@
 const state = {
   currentLang: "en-US",
   finalTranscript: "",
+  recognizing: false,
 };
 let langChangerRadio = document.getElementsByName("lang");
+const textInput = document.getElementById("descr-textarea");
+const voiceTextPreview = document.getElementById("voice-text-preview");
+const finalSpan = document.getElementById("final-span");
+const interimSpan = document.getElementById("interim-span");
+
 function myfunction(event) {
   state.currentLang = event.target.value;
   changeLanguage(event.target.value);
@@ -112,7 +118,6 @@ const changeLanguage = (lang = "en-US") => {
     document.getElementById("textInputLabel"),
     currentLang.textInputLabel
   );
-  const textInput = document.getElementById("descr-textarea");
   textInput.placeholder = currentLang.textInputPlaceholder;
 
   // BUTTONS
@@ -320,10 +325,9 @@ const autoGrow = (element) => {
   element.style.height = element.scrollHeight + "px";
 };
 
-var descrTextarea = document.getElementById("descr-textarea");
-descrTextarea.style.height = descrTextarea.scrollHeight + "px";
-descrTextarea.style.overflowY = "hidden";
-descrTextarea.addEventListener(
+textInput.style.height = textInput.scrollHeight + "px";
+textInput.style.overflowY = "hidden";
+textInput.addEventListener(
   "input",
   function () {
     autoGrow(this);
@@ -360,8 +364,6 @@ speechRecorderButton.addEventListener("click", function () {
 select_dialect = "de-DE";
 //
 
-var create_email = false;
-var recognizing = false;
 var ignore_onend;
 var start_timestamp;
 if (!("webkitSpeechRecognition" in window)) {
@@ -369,14 +371,12 @@ if (!("webkitSpeechRecognition" in window)) {
 } else {
   speechRecorderButton.style.display = "inline-block";
   var recognition = new webkitSpeechRecognition();
-  recognition.continuous = false;
+  recognition.continuous = true;
   recognition.interimResults = true;
 
   recognition.onstart = function () {
-    speechRecorderButton.classList.add("pulser");
-    speechListeningText.classList.add("show");
-
-    recognizing = true;
+    updateUIAfterStartRecognition();
+    state.recognizing = true;
   };
 
   recognition.onerror = function (event) {
@@ -396,15 +396,16 @@ if (!("webkitSpeechRecognition" in window)) {
       }
       ignore_onend = true;
     }
+    state.recognizing = false;
   };
 
   recognition.onend = function () {
-    recognizing = false;
+    state.recognizing = false;
     if (ignore_onend) {
       return;
     }
     // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
-    if (!state.final_transcript) {
+    if (!state.finalTranscript) {
       //showInfo("info_start");
       return;
     }
@@ -414,9 +415,6 @@ if (!("webkitSpeechRecognition" in window)) {
       var range = document.createRange();
       // range.selectNode(document.getElementById("final_span"));
       window.getSelection().addRange(range);
-    }
-    if (create_email) {
-      create_email = false;
     }
   };
 
@@ -431,34 +429,22 @@ if (!("webkitSpeechRecognition" in window)) {
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         state.finalTranscript += event.results[i][0].transcript;
-        state.finalTranscript = capitalize(state.finalTranscript);
         console.log("state.finalTranscript", state.finalTranscript);
-        descrTextarea.value = state.finalTranscript;
       } else {
         interim_transcript += event.results[i][0].transcript;
         interim_transcript = capitalize(interim_transcript);
         console.log("interim_transcript", interim_transcript);
-        descrTextarea.value = interim_transcript;
       }
     }
-
-    autoGrow(descrTextarea);
-
-    if (state.finalTranscript || interim_transcript) {
-      // showButtons("inline-block");
-    }
+    state.finalTranscript = capitalize(state.finalTranscript);
+    textInput.value = state.finalTranscript;
+    finalSpan.innerHTML = state.finalTranscript;
+    interimSpan.innerHTML = interim_transcript;
   };
 }
 
 function upgrade() {
   speechRecorderButton.parentElement.style.display = "none";
-  // showInfo("info_upgrade");
-}
-
-var two_line = /\n\n/g;
-var one_line = /\n/g;
-function linebreak(s) {
-  return s.replace(two_line, "<p></p>").replace(one_line, "<br>");
 }
 
 var first_char = /\S/;
@@ -468,14 +454,27 @@ function capitalize(s) {
   });
 }
 
-function startButton(event) {
-  if (recognizing) {
-    speechRecorderButton.classList.remove("pulser");
-    speechListeningText.classList.remove("show");
+function startButton() {
+  recognition.lang = state.currentLang;
+  if (state.recognizing) {
+    updateUIAfterStopRecognition();
     recognition.stop();
     return;
   }
-  recognition.lang = state.currentLang;
   recognition.start();
   ignore_onend = false;
 }
+const updateUIAfterStartRecognition = () => {
+  speechRecorderButton.classList.add("pulser");
+  speechListeningText.classList.add("show");
+  textInput.style.display = "none";
+  voiceTextPreview.style.display = "block";
+};
+
+const updateUIAfterStopRecognition = () => {
+  speechRecorderButton.classList.remove("pulser");
+  speechListeningText.classList.remove("show");
+  textInput.style.display = "block";
+  voiceTextPreview.style.display = "none";
+  autoGrow(textInput);
+};
