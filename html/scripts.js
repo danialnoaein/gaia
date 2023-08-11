@@ -372,16 +372,13 @@ const startButton = () => {
     return;
   }
   recognition.start();
-  ignore_onend = false;
 };
 const speechRecorderButton = document.getElementById("speech-recorder");
 speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
 
-var ignore_onend;
-var start_timestamp;
-if (!("webkitSpeechRecognition" in window)) {
+if (window.SpeechRecognition === null) {
   upgrade();
 } else {
   speechRecorderButton.style.display = "inline-block";
@@ -389,7 +386,7 @@ if (!("webkitSpeechRecognition" in window)) {
   window.SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
-  var recognition = new webkitSpeechRecognition();
+  var recognition = new window.SpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
 
@@ -400,7 +397,6 @@ if (!("webkitSpeechRecognition" in window)) {
 
   recognition.onerror = function (event) {
     speechRecorderButton.classList.remove("pulser");
-    ignore_onend = true;
     updateUIAfterStopRecognition();
     state.recognizing = false;
   };
