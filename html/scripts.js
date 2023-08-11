@@ -1,3 +1,7 @@
+//Agent check
+const ua = navigator.userAgent.toLowerCase();
+const isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+
 // Lang Changer
 const state = {
   currentLang: "en-US",
@@ -10,6 +14,7 @@ const voiceTextPreview = document.getElementById("voice-text-preview");
 // const finalSpan = document.getElementById("final-span");
 const interimSpan = document.getElementById("interim-span");
 const speechListeningText = document.getElementById("listening");
+const textInputLabel = document.getElementById("textInputLabel");
 
 const langRadioChangeHandle = (event) => {
   state.currentLang = event.target.value;
@@ -112,10 +117,10 @@ const changeLanguage = (lang = "en-US") => {
   // MIC
   changeElemetLang(speechListeningText, currentLang.micListeningLabel);
   // TEXT INPUT
-  changeElemetLang(
-    document.getElementById("textInputLabel"),
-    currentLang.textInputLabel
-  );
+  changeElemetLang(textInputLabel, currentLang.textInputLabel);
+  if (isAndroid) {
+    textInputLabel.innerHTML += " (from Android)";
+  }
   textInput.placeholder = currentLang.textInputPlaceholder;
 
   // BUTTONS
@@ -329,6 +334,7 @@ form.addEventListener("submit", function (event) {
   sendData();
 });
 
+//AutoGrow input
 const autoGrow = (element) => {
   element.style.height = 0;
   element.style.height = element.scrollHeight + "px";
@@ -412,12 +418,15 @@ if (window.SpeechRecognition === null) {
 
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
-        if (state.finalTranscript.length > 0) {
-          state.finalTranscript += " ";
+        if (isAndroid) {
+          state.finalTranscript = event.results[i][0].transcript;
+        } else {
+          if (state.finalTranscript.length > 0) {
+            state.finalTranscript += " ";
+          }
+          state.finalTranscript += event.results[i][0].transcript;
         }
-        state.finalTranscript += event.results[i][0].transcript;
         speechListeningText.textContent = "Listening...";
-        // state.finalTranscript = capitalize(state.finalTranscript);
         textInput.value = state.finalTranscript;
         autoGrow(textInput);
       } else {
@@ -429,11 +438,4 @@ if (window.SpeechRecognition === null) {
 
 function upgrade() {
   speechRecorderButton.parentElement.style.display = "none";
-}
-
-var first_char = /\S/;
-function capitalize(s) {
-  return s.replace(first_char, function (m) {
-    return m.toUpperCase();
-  });
 }
