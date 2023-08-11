@@ -385,6 +385,8 @@ speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
 
+const test = document.getElementById("test");
+
 var ignore_onend;
 var start_timestamp;
 if (!("webkitSpeechRecognition" in window)) {
@@ -471,8 +473,7 @@ if (!("webkitSpeechRecognition" in window)) {
     finalSpan.textContent = state.finalTranscript;
     interimSpan.textContent = interim_transcript;
 
-    document.getElementById("test").textContent =
-      "state.finalTranscript: " + state.finalTranscript;
+    test.textContent = "state.finalTranscript: " + state.finalTranscript;
   };
 }
 
