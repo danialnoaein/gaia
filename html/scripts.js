@@ -391,6 +391,10 @@ if (!("webkitSpeechRecognition" in window)) {
   upgrade();
 } else {
   speechRecorderButton.style.display = "inline-block";
+
+  window.SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
   var recognition = new webkitSpeechRecognition();
   recognition.continuous = true;
   recognition.interimResults = true;
@@ -448,20 +452,23 @@ if (!("webkitSpeechRecognition" in window)) {
       upgrade();
       return;
     }
+
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
+        if (state.finalTranscript.length > 0) {
+          state.finalTranscript += " ";
+        }
         state.finalTranscript += event.results[i][0].transcript;
         console.log("state.finalTranscript", state.finalTranscript);
       } else {
         interim_transcript += event.results[i][0].transcript;
-        interim_transcript = capitalize(interim_transcript);
         console.log("interim_transcript", interim_transcript);
       }
     }
     state.finalTranscript = capitalize(state.finalTranscript);
     textInput.value = state.finalTranscript;
-    finalSpan.innerHTML = state.finalTranscript;
-    // interimSpan.innerHTML = interim_transcript;
+    finalSpan.textContent = state.finalTranscript;
+    interimSpan.textContent = interim_transcript;
   };
 }
 
