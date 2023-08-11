@@ -7,8 +7,9 @@ const state = {
 let langChangerRadio = document.getElementsByName("lang");
 const textInput = document.getElementById("descr-textarea");
 const voiceTextPreview = document.getElementById("voice-text-preview");
-const finalSpan = document.getElementById("final-span");
+// const finalSpan = document.getElementById("final-span");
 const interimSpan = document.getElementById("interim-span");
+const speechListeningText = document.getElementById("listening");
 
 const langRadioChangeHandle = (event) => {
   state.currentLang = event.target.value;
@@ -109,10 +110,7 @@ const changeLanguage = (lang = "en-US") => {
   });
 
   // MIC
-  changeElemetLang(
-    document.getElementById("listening"),
-    currentLang.micListeningLabel
-  );
+  changeElemetLang(speechListeningText, currentLang.micListeningLabel);
   // TEXT INPUT
   changeElemetLang(
     document.getElementById("textInputLabel"),
@@ -134,15 +132,11 @@ changeLanguage();
 const updateUIAfterStartRecognition = () => {
   speechRecorderButton.classList.add("pulser");
   speechListeningText.classList.add("show");
-  textInput.style.display = "none";
-  voiceTextPreview.style.display = "block";
 };
 
 const updateUIAfterStopRecognition = () => {
   speechRecorderButton.classList.remove("pulser");
   speechListeningText.classList.remove("show");
-  textInput.style.display = "block";
-  voiceTextPreview.style.display = "none";
   autoGrow(textInput);
 };
 
@@ -380,12 +374,9 @@ const startButton = () => {
   ignore_onend = false;
 };
 const speechRecorderButton = document.getElementById("speech-recorder");
-const speechListeningText = document.getElementById("listening");
 speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
-
-const test = document.getElementById("test");
 
 var ignore_onend;
 var start_timestamp;
@@ -448,8 +439,7 @@ if (!("webkitSpeechRecognition" in window)) {
 
   recognition.onresult = function (event) {
     var interim_transcript = "";
-    interimSpan.textContent = "";
-    finalSpan.textContent = "";
+    listening.textContent = "";
     if (typeof event.results == "undefined") {
       recognition.onend = null;
       recognition.stop();
@@ -462,18 +452,19 @@ if (!("webkitSpeechRecognition" in window)) {
         if (state.finalTranscript.length > 0) {
           state.finalTranscript += " ";
         }
+        // finalSpan.textContent += event.results[i][0].transcript;
         state.finalTranscript += event.results[i][0].transcript;
+        speechListeningText.textContent = "Listening...";
+        state.finalTranscript = capitalize(state.finalTranscript);
+        textInput.value = state.finalTranscript;
+        autoGrow(textInput);
       } else {
-        interim_transcript += event.results[i][0].transcript;
-        console.log("interim_transcript", interim_transcript);
+        // interim_transcript += event.results[i][0].transcript;
+        speechListeningText.textContent += event.results[i][0].transcript;
       }
     }
-    state.finalTranscript = capitalize(state.finalTranscript);
-    textInput.value = state.finalTranscript;
-    finalSpan.textContent = state.finalTranscript;
-    interimSpan.textContent = interim_transcript;
-
-    test.textContent = "state.finalTranscript: " + state.finalTranscript;
+    // finalSpan.textContent = state.finalTranscript;
+    // interimSpan.textContent = interim_transcript;
   };
 }
 
