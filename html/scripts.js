@@ -1,6 +1,5 @@
 //Agent check
-const ua = navigator.userAgent.toLowerCase();
-const isAndroid = ua.indexOf("android") > -1; //&& ua.indexOf("mobile");
+var isAndroid = /(android)/i.test(navigator.userAgent);
 
 // Lang Changer
 const state = {
@@ -407,15 +406,21 @@ if (window.SpeechRecognition === null) {
     state.recognizing = false;
   };
 
+  recognition.onspeechend = function () {
+    updateUIAfterStopRecognition();
+    recognition.stop();
+    state.recognizing = false;
+    speechListeningText.textContent = "Listening...";
+  };
+
+  recognition.onerror = function (event) {
+    updateUIAfterStopRecognition();
+    state.recognizing = false;
+    speechListeningText.textContent = "Listening...";
+  };
+
   recognition.onresult = (event) => {
     speechListeningText.textContent = "";
-    // if (typeof event.results == "undefined") {
-    //   recognition.onend = null;
-    //   recognition.stop();
-    //   upgrade();
-    //   return;
-    // }
-
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         if (isAndroid) {
@@ -426,7 +431,6 @@ if (window.SpeechRecognition === null) {
           }
           state.finalTranscript += event.results[i][0].transcript;
         }
-        speechListeningText.textContent = "Listening...";
         textInput.value = state.finalTranscript;
         autoGrow(textInput);
       } else {
