@@ -447,6 +447,7 @@ if (!("webkitSpeechRecognition" in window)) {
   recognition.onresult = function (event) {
     var interim_transcript = "";
     interimSpan.textContent = "";
+    finalSpan.textContent = "";
     if (typeof event.results == "undefined") {
       recognition.onend = null;
       recognition.stop();
