@@ -461,7 +461,6 @@ if (!("webkitSpeechRecognition" in window)) {
           state.finalTranscript += " ";
         }
         state.finalTranscript += event.results[i][0].transcript;
-        console.log("state.finalTranscript", state.finalTranscript);
       } else {
         interim_transcript += event.results[i][0].transcript;
         console.log("interim_transcript", interim_transcript);
@@ -471,6 +470,9 @@ if (!("webkitSpeechRecognition" in window)) {
     textInput.value = state.finalTranscript;
     finalSpan.textContent = state.finalTranscript;
     interimSpan.textContent = interim_transcript;
+
+    document.getElementById("test").textContent =
+      "state.finalTranscript: " + state.finalTranscript;
   };
 }
 
