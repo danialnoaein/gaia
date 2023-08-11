@@ -404,17 +404,12 @@ if (window.SpeechRecognition === null) {
     speechRecorderButton.classList.remove("pulser");
     updateUIAfterStopRecognition();
     state.recognizing = false;
+    speechListeningText.textContent = "Listening...";
   };
 
   recognition.onspeechend = function () {
     updateUIAfterStopRecognition();
     recognition.stop();
-    state.recognizing = false;
-    speechListeningText.textContent = "Listening...";
-  };
-
-  recognition.onerror = function (event) {
-    updateUIAfterStopRecognition();
     state.recognizing = false;
     speechListeningText.textContent = "Listening...";
   };
@@ -425,6 +420,7 @@ if (window.SpeechRecognition === null) {
       if (event.results[i].isFinal) {
         if (isAndroid) {
           state.finalTranscript = event.results[i][0].transcript;
+          speechListeningText.textContent += event.results[i][0].transcript;
         } else {
           if (state.finalTranscript.length > 0) {
             state.finalTranscript += " ";
