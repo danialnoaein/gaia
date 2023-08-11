@@ -368,6 +368,7 @@ const startButton = () => {
   if (state.recognizing) {
     updateUIAfterStopRecognition();
     recognition.stop();
+    state.recognizing = false;
     return;
   }
   recognition.start();
@@ -405,13 +406,13 @@ if (!("webkitSpeechRecognition" in window)) {
   };
 
   recognition.onresult = (event) => {
-    listening.textContent = "";
-    if (typeof event.results == "undefined") {
-      recognition.onend = null;
-      recognition.stop();
-      upgrade();
-      return;
-    }
+    speechListeningText.textContent = "";
+    // if (typeof event.results == "undefined") {
+    //   recognition.onend = null;
+    //   recognition.stop();
+    //   upgrade();
+    //   return;
+    // }
 
     for (var i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
@@ -420,7 +421,7 @@ if (!("webkitSpeechRecognition" in window)) {
         }
         state.finalTranscript += event.results[i][0].transcript;
         speechListeningText.textContent = "Listening...";
-        state.finalTranscript = capitalize(state.finalTranscript);
+        // state.finalTranscript = capitalize(state.finalTranscript);
         textInput.value = state.finalTranscript;
         autoGrow(textInput);
       } else {
