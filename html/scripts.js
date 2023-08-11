@@ -398,47 +398,13 @@ if (!("webkitSpeechRecognition" in window)) {
   };
 
   recognition.onerror = function (event) {
-    if (event.error == "no-speech") {
-      ignore_onend = true;
-    }
-    if (event.error == "audio-capture") {
-      ignore_onend = true;
-    }
-    if (event.error == "not-allowed") {
-      if (event.timeStamp - start_timestamp < 100) {
-        // showInfo("info_blocked");
-        speechRecorderButton.classList.remove("pulser");
-      } else {
-        // showInfo("info_denied");
-        speechRecorderButton.classList.remove("pulser");
-      }
-      ignore_onend = true;
-    }
+    speechRecorderButton.classList.remove("pulser");
+    ignore_onend = true;
     updateUIAfterStopRecognition();
     state.recognizing = false;
   };
 
-  recognition.onend = function () {
-    state.recognizing = false;
-    if (ignore_onend) {
-      return;
-    }
-    // start_img.src = "/intl/en/chrome/assets/common/images/content/mic.gif";
-    if (!state.finalTranscript) {
-      //showInfo("info_start");
-      return;
-    }
-    //showInfo("");
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-      var range = document.createRange();
-      // range.selectNode(document.getElementById("final_span"));
-      window.getSelection().addRange(range);
-    }
-  };
-
-  recognition.onresult = function (event) {
-    var interim_transcript = "";
+  recognition.onresult = (event) => {
     listening.textContent = "";
     if (typeof event.results == "undefined") {
       recognition.onend = null;
@@ -452,19 +418,15 @@ if (!("webkitSpeechRecognition" in window)) {
         if (state.finalTranscript.length > 0) {
           state.finalTranscript += " ";
         }
-        // finalSpan.textContent += event.results[i][0].transcript;
         state.finalTranscript += event.results[i][0].transcript;
         speechListeningText.textContent = "Listening...";
         state.finalTranscript = capitalize(state.finalTranscript);
         textInput.value = state.finalTranscript;
         autoGrow(textInput);
       } else {
-        // interim_transcript += event.results[i][0].transcript;
         speechListeningText.textContent += event.results[i][0].transcript;
       }
     }
-    // finalSpan.textContent = state.finalTranscript;
-    // interimSpan.textContent = interim_transcript;
   };
 }
 
