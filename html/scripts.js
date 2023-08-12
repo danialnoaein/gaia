@@ -383,13 +383,13 @@ speechRecorderButton.addEventListener("click", function () {
   startButton();
 });
 
+window.SpeechRecognition =
+  window.SpeechRecognition || window.webkitSpeechRecognition || null;
+
 if (window.SpeechRecognition === null) {
   upgrade();
 } else {
   speechRecorderButton.style.display = "inline-block";
-
-  window.SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition || null;
 
   var recognition = new window.SpeechRecognition();
   recognition.continuous = true;
